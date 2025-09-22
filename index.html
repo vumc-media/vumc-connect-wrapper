@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>VUMC Connect</title>
+
+  <!-- PWA basics -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b3d91">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- iOS icon -->
+  <link rel="apple-touch-icon" href="/icons/icon-180.png">
+  <!-- (Optional) add more apple-touch-icon sizes if you’d like -->
+
+  <style>
+    html,body {height:100%;margin:0}
+    body {
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#0b3d91;color:#fff;
+    }
+    .logo {width:96px;height:96px;border-radius:22%; overflow:hidden; margin-bottom:16px}
+    .logo img {width:100%;height:100%;object-fit:cover}
+    .tag {opacity:.9}
+    .spinner {
+      margin-top:16px; width:36px; height:36px; border-radius:50%;
+      border:4px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin 1s linear infinite;
+    }
+    @keyframes spin {to{transform:rotate(360deg)}}
+    a.skip {color:#fff; margin-top:18px; text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="logo"><img src="/icons/icon-192.png" alt="VUMC Connect"></div>
+  <div class="tag">Opening VUMC Connect…</div>
+  <div class="spinner" aria-hidden="true"></div>
+  <a class="skip" href="https://connect.versaillesumc.org/home">Tap here if it doesn’t open</a>
+
+  <script>
+    // Change this to the exact page you want to land on:
+    const TARGET = "https://connect.versaillesumc.org/home";
+    // Slight delay so users see your splash
+    setTimeout(() => { window.location.replace(TARGET); }, 900);
+    // Register SW (optional but helps with installability)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    }
+  </script>
+</body>
+</html>
