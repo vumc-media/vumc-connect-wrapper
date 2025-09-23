@@ -36,6 +36,7 @@
     }
     @keyframes spin {to{transform:rotate(360deg)}}
     a.skip {color:#fff; margin-top:18px; text-decoration:underline}
+    .hint {margin-top:14px; font-size:14px; opacity:.9}
     .fade-out { animation: fade 400ms ease forwards }
     @keyframes fade { to { opacity: 0; transform: scale(.985) } }
   </style>
@@ -47,16 +48,28 @@
   <a class="skip" href="https://connect.versaillesumc.org/home">Tap here if it doesn’t open</a>
 
   <script>
-    // Target URL
     const TARGET = "https://connect.versaillesumc.org/home";
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
-    // Show splash for 3 seconds, then fade out and redirect
-    setTimeout(() => {
-      document.body.classList.add('fade-out');
-      setTimeout(() => window.location.replace(TARGET), 420);
-    }, 3000);
+    // If launched from iOS home screen (standalone), go straight in
+    if (window.navigator.standalone) {
+      window.location.replace(TARGET);
+    } else if (isIOS) {
+      // iOS Safari (not installed): stay here so user can Add to Home Screen
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        '<div class="hint">Tip: In Safari, tap <b>Share</b> → <b>Add to Home Screen</b> to install VUMC Connect.</div>'
+      );
+    } else {
+      // Android / other browsers: splash for 3s then redirect
+      setTimeout(() => {
+        document.body.classList.add('fade-out');
+        setTimeout(() => window.location.replace(TARGET), 420);
+      }, 3000);
+    }
 
-    // Register service worker
+    // Register service worker for PWA installability
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(()=>{});
     }
